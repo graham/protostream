@@ -8,12 +8,11 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/graham/protostream/data"
 )
 
 func GenReader(b *testing.B) *bytes.Reader {
 	buf := bytes.NewBuffer([]byte{})
-	t := &data.Person{
+	t := &Person{
 		Name:  "Graham",
 		Id:    123,
 		Email: "graham.abbott@gmail.com",
@@ -32,7 +31,7 @@ func Benchmark_PureWrite(b *testing.B) {
 
 func Benchmark_PureRead(b *testing.B) {
 	buf := GenReader(b)
-	pb := data.Person{}
+	pb := Person{}
 
 	b.ResetTimer()
 
@@ -51,13 +50,13 @@ func Benchmark_PureRead(b *testing.B) {
 
 func Benchmark_ChanRead(b *testing.B) {
 	buf := GenReader(b)
-	pb := data.Person{}
+	pb := Person{}
 	c := make(chan proto.Message, 1)
 	go ReadToChan(buf, &pb, c)
 
 	b.ResetTimer()
 	for p := range c {
-		if p.(*data.Person).Id != 123 {
+		if p.(*Person).Id != 123 {
 			panic("not equal")
 		}
 	}
@@ -67,7 +66,7 @@ func Benchmark_ChanWrite(b *testing.B) {
 	buf := bytes.NewBuffer([]byte{})
 	c := make(chan proto.Message, 1)
 
-	t := &data.Person{
+	t := &Person{
 		Name:  "Graham",
 		Id:    123,
 		Email: "graham.abbott@gmail.com",
@@ -82,7 +81,7 @@ func Benchmark_ChanWrite(b *testing.B) {
 
 }
 
-type Person struct {
+type PersonJson struct {
 	Name  string
 	Id    int
 	Email string
@@ -90,7 +89,7 @@ type Person struct {
 
 func GenReader_json(b *testing.B) *bytes.Reader {
 	buf := bytes.NewBuffer([]byte{})
-	t := Person{"Graham", 123, "graham.abbott@gmail.com"}
+	t := PersonJson{"Graham", 123, "graham.abbott@gmail.com"}
 	enc := json.NewEncoder(buf)
 
 	for i := 0; i < b.N; i++ {
@@ -107,7 +106,8 @@ func Benchmark_PureWrite_json(b *testing.B) {
 func Benchmark_PureRead_json(b *testing.B) {
 	buf := GenReader_json(b)
 	dec := json.NewDecoder(buf)
-	var p Person
+
+	var p PersonJson
 
 	b.ResetTimer()
 

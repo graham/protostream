@@ -1,1 +1,1 @@
-protoc --gofast_out=import_path=data:data tutorial.proto 
+protoc --gofast_out=import_path=protostream:. tutorial.proto 
