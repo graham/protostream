@@ -18,6 +18,13 @@ The package provides:
 
 Channel methods are slower, but make life easier. The performance is very nice compared to something like JSON (which is actually quite fast in Go).
 
+## Benchmarks
+You'll need to compile the included protobuf in order to run benchmarks:
+
+```protoc --gofast_out=import_path=protostream:. tutorial.proto```
+
+An example run:
+
 ```
 goos: darwin
 goarch: amd64
@@ -31,3 +38,5 @@ Benchmark_PureRead_json-8    	 1000000	      1626 ns/op
 PASS
 ok  	github.com/graham/protostream	14.401s
 ```
+
+Author: Graham Abbott
