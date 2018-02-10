@@ -7,10 +7,6 @@ import (
 	"github.com/gogo/protobuf/proto"
 )
 
-type ProtoWriter struct {
-	io.Writer
-}
-
 const BYTES_FOR_SIZE = 8
 
 func Write(w io.Writer, mesg proto.Message) (n int, err error) {
