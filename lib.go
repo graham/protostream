@@ -20,7 +20,7 @@ func Write(w io.Writer, mesg proto.Message) (n int, err error) {
 	sizeBuf := make([]byte, BYTES_FOR_SIZE)
 	binary.BigEndian.PutUint64(sizeBuf, uint64(messageSize))
 
-	var total int = BYTES_FOR_SIZE
+	var total int = 0
 
 	n, err = w.Write(sizeBuf)
 	total += n
